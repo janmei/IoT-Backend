@@ -1,25 +1,33 @@
 import mongoose, { Schema } from 'mongoose'
 
-const deviceSchema = new Schema({
-  dId: {
-    type: String
+const deviceSchema = new Schema(
+  {
+    dId: {
+      type: Number
+    },
+    action: {
+      type: String
+    },
+    name: {
+      type: String
+    },
+    connections: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Connection'
+      }
+    ]
   },
-  action: {
-    type: String
-  },
-  name: {
-    type: String
-  },
-  connections: {
-    type: String
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (obj, ret) => {
+        delete ret._id
+      }
+    }
   }
-}, {
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    transform: (obj, ret) => { delete ret._id }
-  }
-})
+)
 
 deviceSchema.methods = {
   view (full) {
@@ -34,10 +42,12 @@ deviceSchema.methods = {
       updatedAt: this.updatedAt
     }
 
-    return full ? {
-      ...view
-      // add properties for a full view
-    } : view
+    return full
+      ? {
+        ...view
+        // add properties for a full view
+      }
+      : view
   }
 }
 

@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import device from './device'
+import connection from './connection'
 
 const router = new Router()
 
 router.use('/devices', device)
+router.use('/connections', connection)
 
 /**
  * @apiDefine master Master access only

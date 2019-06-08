@@ -3,27 +3,65 @@ var conn = require('./config.json');
 var client = mqtt.connect(
 	`mqtts://${conn.username}:${conn.pass}@m24.cloudmqtt.com:${conn.port}`
 );
-var express = require('express');
-var app = express();
 
-app.use('react', './front-edn/public/index.html');
-// React Site
-app.get('/admin', function(req, res) {
-	res.send('Hello World!');
-});
+var axios = require('axios');
+var qs = require('qs');
+
+const DB_URL = 'http://localhost:9000';
+const config = {
+	headers: {
+		'Content-Type': 'application/x-www-form-urlencoded'
+	}
+};
 
 client.on('connect', function() {
-	client.subscribe('presence', function(err) {
+	client.subscribe('/', function(err) {
 		if (err) throw err;
 	});
 });
 
 client.on('message', function(topic, message) {
 	// message is Buffer
-	console.log(message.toString());
-	client.end();
+	var parsed = JSON.parse(message);
+	console.log(parsed);
+
+	// send socket message to frontend
+	// sendSocket()
+
+	// SEND TO DB
+	// queryAndStore(parsed);
 });
 
-app.listen(3000, function() {
-	console.log('Example app listening on port 3000!');
-});
+triggerConnections = json => {
+	axios
+		.get(DB_URL + '/devices/' + json.id, data, config)
+		.then(res => {
+			var body = res.body;
+
+			var connections = body.connections;
+
+			for (var connect of connections) {
+				client.publish('/d/' + connect.to, connect.payload);
+			}
+		})
+		.catch(err => {
+			if (err) throw err;
+		});
+};
+
+signUpDevice = json => {
+	var data = qs.stringify(
+		{
+			dId: json.id,
+			action: json.action
+		},
+		{ allowDots: true }
+	);
+
+	axios
+		.put(DB_URL + '/devices/' + json.id, data, config)
+		// .then(res => console.log(res))
+		.catch(err => {
+			if (err) throw err;
+		});
+};
