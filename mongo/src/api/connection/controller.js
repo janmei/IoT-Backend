@@ -24,13 +24,9 @@ export const show = ({ params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const update = ({ bodymen: { body }, params }, res, next) =>
-  Connection.findById(params.id)
+export const update = (req, res, next) =>
+  View.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     .then(notFound(res))
-    .then(connection =>
-      connection ? Object.assign(connection, body).save() : null
-    )
-    .then(connection => (connection ? connection.view(true) : null))
     .then(success(res))
     .catch(next)
 

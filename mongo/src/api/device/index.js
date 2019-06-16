@@ -7,7 +7,8 @@ import {
   show,
   update,
   destroy,
-  updateConnections
+  updateConnections,
+  showByDid
 } from './controller'
 import { schema } from './model'
 export Device, { schema } from './model'
@@ -48,6 +49,7 @@ router.get('/', query(), index)
  * @apiError 404 Device not found.
  */
 router.get('/:id', show)
+router.get('/did/:id', showByDid)
 
 /**
  * @api {put} /devices/:id Update device

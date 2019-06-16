@@ -1,7 +1,14 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { create, index, show, update, destroy } from './controller'
+import {
+  create,
+  index,
+  show,
+  update,
+  destroy,
+  addToConnectionList
+} from './controller'
 import { schema } from './model'
 export Connection, { schema } from './model'
 
@@ -19,9 +26,7 @@ const { from, to, payload } = schema.tree
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Connection not found.
  */
-router.post('/',
-  body({ from, to, payload }),
-  create)
+router.post('/', body({ from, to, payload }), create)
 
 /**
  * @api {get} /connections Retrieve connections
@@ -31,9 +36,7 @@ router.post('/',
  * @apiSuccess {Object[]} connections List of connections.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  */
-router.get('/',
-  query(),
-  index)
+router.get('/', query(), index)
 
 /**
  * @api {get} /connections/:id Retrieve connection
@@ -43,8 +46,7 @@ router.get('/',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Connection not found.
  */
-router.get('/:id',
-  show)
+router.get('/:id', show)
 
 /**
  * @api {put} /connections/:id Update connection
@@ -57,9 +59,7 @@ router.get('/:id',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Connection not found.
  */
-router.put('/:id',
-  body({ from, to, payload }),
-  update)
+router.put('/:id', body({ from, to, payload }), update)
 
 /**
  * @api {delete} /connections/:id Delete connection
@@ -68,7 +68,6 @@ router.put('/:id',
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Connection not found.
  */
-router.delete('/:id',
-  destroy)
+router.delete('/:id', destroy)
 
 export default router

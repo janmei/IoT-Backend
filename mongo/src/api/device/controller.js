@@ -48,6 +48,27 @@ export const show = ({ params }, res, next) =>
     .then(success(res))
     .catch(next)
 
+export const showByDid = ({ params }, res, next) =>
+  Device.findOne({ dId: params.id })
+    .populate({
+      path: 'connections',
+      populate: {
+        path: 'to',
+        model: 'Device'
+      }
+    })
+    .populate({
+      path: 'connections',
+      populate: {
+        path: 'from',
+        model: 'Device'
+      }
+    })
+    .then(notFound(res))
+    .then(device => (device ? device.view() : null))
+    .then(success(res))
+    .catch(next)
+
 export const update = (req, res, next) =>
   Device.findOneAndUpdate(
     {
@@ -61,13 +82,7 @@ export const update = (req, res, next) =>
     .catch(next)
 
 export const updateConnections = (req, res, next) =>
-  Device.findOneAndUpdate(
-    {
-      dId: req.params.id
-    },
-    { $push: req.body },
-    { new: true, upsert: true }
-  )
+  Device.findByIdAndUpdate(req.params.id, { $push: req.body }, { new: true })
     .then(notFound(res))
     .then(success(res))
     .catch(next)
