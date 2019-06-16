@@ -20,7 +20,7 @@ var payload = {
 };
 
 setInterval(() => {
-	client.publish('d/0', JSON.stringify(payload));
+	client.publish('d/s/1', JSON.stringify(payload));
 }, 5000);
 
 // client.on('message', function(topic, message) {

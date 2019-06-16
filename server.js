@@ -15,7 +15,7 @@ const config = {
 };
 
 client.on('connect', function() {
-	client.subscribe('/', function(err) {
+	client.subscribe('#', function(err) {
 		if (err) throw err;
 	});
 });
@@ -23,7 +23,11 @@ client.on('connect', function() {
 client.on('message', function(topic, message) {
 	// message is Buffer
 	var parsed = JSON.parse(message);
-	console.log(parsed);
+	console.log(topic);
+
+	if (topic.includes('d/s/')) {
+		triggerConnections(parsed);
+	}
 
 	// send socket message to frontend
 	// sendSocket()
@@ -34,14 +38,16 @@ client.on('message', function(topic, message) {
 
 triggerConnections = json => {
 	axios
-		.get(DB_URL + '/devices/' + json.id, data, config)
+		.get(DB_URL + '/api/devices/did/' + json.id)
 		.then(res => {
-			var body = res.body;
+			var body = res.data;
 
 			var connections = body.connections;
 
+			var payload = { type: 'action' };
+
 			for (var connect of connections) {
-				client.publish('/d/' + connect.to, connect.payload);
+				client.publish('s/d/' + connect.to.dId, JSON.stringify(payload));
 			}
 		})
 		.catch(err => {
