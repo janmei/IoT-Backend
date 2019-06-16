@@ -9,13 +9,40 @@ export const create = (req, res, next) =>
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   Device.find(query, select, cursor)
-    .populate('connections')
+    .populate({
+      path: 'connections',
+      populate: {
+        path: 'to',
+        model: 'Device'
+      }
+    })
+    .populate({
+      path: 'connections',
+      populate: {
+        path: 'from',
+        model: 'Device'
+      }
+    })
     .then(devices => devices.map(device => device.view()))
     .then(success(res))
     .catch(next)
 
 export const show = ({ params }, res, next) =>
   Device.findById(params.id)
+    .populate({
+      path: 'connections',
+      populate: {
+        path: 'to',
+        model: 'Device'
+      }
+    })
+    .populate({
+      path: 'connections',
+      populate: {
+        path: 'from',
+        model: 'Device'
+      }
+    })
     .then(notFound(res))
     .then(device => (device ? device.view() : null))
     .then(success(res))

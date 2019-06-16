@@ -1,22 +1,29 @@
 import mongoose, { Schema } from 'mongoose'
 
-const connectionSchema = new Schema({
-  from: {
-    type: String
+const connectionSchema = new Schema(
+  {
+    from: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Device'
+    },
+    to: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Device'
+    },
+    payload: {
+      type: String
+    }
   },
-  to: {
-    type: String
-  },
-  payload: {
-    type: String
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (obj, ret) => {
+        delete ret._id
+      }
+    }
   }
-}, {
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    transform: (obj, ret) => { delete ret._id }
-  }
-})
+)
 
 connectionSchema.methods = {
   view (full) {
@@ -30,10 +37,12 @@ connectionSchema.methods = {
       updatedAt: this.updatedAt
     }
 
-    return full ? {
-      ...view
-      // add properties for a full view
-    } : view
+    return full
+      ? {
+        ...view
+        // add properties for a full view
+      }
+      : view
   }
 }
 

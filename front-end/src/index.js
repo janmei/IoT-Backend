@@ -1,19 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import init from "./editor";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './pages/App/App';
+import * as serviceWorker from './serviceWorker';
 
-import "./styles.css";
+ReactDOM.render(<App />, document.getElementById('root'));
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <div style={{ textAlign: "left", width: "100vw", height: "70vh" }}>
-        <div ref={el => init(el)} />
-      </div>
-    </div>
-  );
-}
-
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();

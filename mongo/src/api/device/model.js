@@ -5,9 +5,6 @@ const deviceSchema = new Schema(
     dId: {
       type: Number
     },
-    action: {
-      type: String
-    },
     name: {
       type: String
     },
