@@ -1,7 +1,8 @@
 var mqtt = require('mqtt');
 var conn = require('./config.json');
 var client = mqtt.connect(
-	`mqtts://${conn.username}:${conn.pass}@m24.cloudmqtt.com:${conn.port}`
+	// `mqtts://${conn.username}:${conn.pass}@m24.cloudmqtt.com:${conn.port}`
+	`mqtt://localhost:1883`
 );
 
 var axios = require('axios');
@@ -25,7 +26,7 @@ client.on('message', function(topic, message) {
 	var parsed = JSON.parse(message);
 	console.log(topic);
 
-	if (topic.includes('d/s/')) {
+	if (topic.includes('/d/s/')) {
 		triggerConnections(parsed);
 	}
 
@@ -47,7 +48,7 @@ triggerConnections = json => {
 			var payload = { type: 'action' };
 
 			for (var connect of connections) {
-				client.publish('s/d/' + connect.to.dId, JSON.stringify(payload));
+				client.publish('/s/d/' + connect.to.dId, JSON.stringify(payload));
 			}
 		})
 		.catch(err => {

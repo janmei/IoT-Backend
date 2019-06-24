@@ -1,11 +1,9 @@
 var mqtt = require('mqtt');
 var conn = require('./config.json');
-var client = mqtt.connect(
-	`mqtts://${conn.username}:${conn.pass}@m24.cloudmqtt.com:${conn.port}`
-);
+var client = mqtt.connect(`mqtt://localhost:1883`);
 
 client.on('connect', function() {
-	client.subscribe('s/d/0', function(err) {
+	client.subscribe('/s/d/0', function(err) {
 		if (!err) {
 		}
 	});
