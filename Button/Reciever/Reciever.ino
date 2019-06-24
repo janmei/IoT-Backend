@@ -18,6 +18,7 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+ int state = 0;
  
 void setup() {
   
@@ -29,7 +30,19 @@ void setup() {
     Serial.begin(115200);
     setup_wifi();
     client.setServer(MQTT_BROKER, 1883);
+    client.setCallback(callback);
 
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  StaticJsonDocument<256> doc;
+  deserializeJson(doc, payload, length);
+  // use the JsonDocument as usual...
+  const char* type = doc["type"];
+  if(type == "action"){
+    state = 1;
+  }
+  Serial.println(state);
 
 }
  
@@ -53,52 +66,34 @@ void setup_wifi() {
 }
  
 void reconnect() {
-    while (!client.connected()) {
-        Serial.print("Reconnecting...");
-        if (!client.connect("ESP8266Client")) {
-            Serial.print("failed, rc=");
-            Serial.print(client.state());
-            Serial.println(" retrying in 5 seconds");
-            delay(5000);
-        }
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect("arduinoClient")) {
+      Serial.println("connected");
+      // ... and resubscribe
+      client.subscribe("/s/d/0");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
     }
+  }
 }
+
 void loop() {
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
 
-const size_t capacity = 2*JSON_OBJECT_SIZE(2)+90;
-char buffer[526];
-DynamicJsonDocument doc(capacity);
-
-doc["id"] = 1;
-
-JsonObject action = doc.createNestedObject("action");
-action["name"] = "ping";
-action["state"] = 1;
-
-serializeJson(doc, buffer);
-    
-    if (!client.connected()) {
-        reconnect();
-    }
-    client.loop();
-
-      // read the state of the pushbutton value:
-  buttonState = digitalRead(buttonPin);
-
-  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-  if (buttonState == LOW) {
-    if(!pressed){
-      pressed = true;
-      Serial.print("Publish message: ");
-      Serial.println(msg);
-      client.publish("/d/s/1", buffer);
-      // turn LED on:
-      digitalWrite(ledPin, LOW);
-    }
-  } else {
-    // turn LED off:
-    digitalWrite(ledPin, HIGH);
-    pressed = false;
+  
+  if(state == 1){
+    state = 0;
+      Serial.println(state);
   }
 
 }
