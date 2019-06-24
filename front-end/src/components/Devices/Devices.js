@@ -17,7 +17,11 @@ class Devices extends Component {
 			devices: [],
 			connections: [],
 			addConnection: '',
-			selectedDevice: ''
+			addNewConnection: false,
+			selectedDevice: '',
+			selectedDeviceInput: '',
+			selectedDeviceOutput: '',
+			deviceConnections: []
 		};
 	}
 
@@ -26,6 +30,7 @@ class Devices extends Component {
 			this.setState({
 				connections: res.data
 			});
+			this.setupDeviceConnections(res.data);
 		});
 		Axios.get('/api/devices').then(res => {
 			this.setState({
@@ -34,10 +39,41 @@ class Devices extends Component {
 		});
 	}
 
+	updateConnections = () => {
+		Axios.get('/api/connections').then(res => {
+			this.setState({
+				connections: res.data
+			});
+		});
+	};
+
+	setupDeviceConnections = data => {
+		data.forEach(el => {
+			if (this.state.deviceConnections.length > 0) {
+				if (this.state.deviceConnections.find(x => x.id === el.id) != true) {
+					var obj = {
+						dId: el.from.dId,
+						connections: ''
+					};
+					this.state.deviceConnections.push(el);
+				}
+			}
+		});
+	};
+
 	addConnection = e => {
 		this.setState({
 			addConnection: e.target.value,
 			selectedDevice: this.state.devices[0].id
+		});
+		e.preventDefault();
+	};
+
+	addNewConnection = e => {
+		this.setState({
+			addNewConnection: true,
+			selectedDeviceInput: this.state.devices[0].id,
+			selectedDeviceOutput: this.state.devices[0].id
 		});
 		e.preventDefault();
 	};
@@ -51,6 +87,12 @@ class Devices extends Component {
 			return;
 		}
 	}
+
+	createConnection = () => {
+		Axios.post('/api/connections', config).then(res => {
+			this.updateConnections();
+		});
+	};
 
 	saveConnectionTo = (from, to, e) => {
 		var data = qs.stringify(
@@ -70,7 +112,11 @@ class Devices extends Component {
 
 		Axios.post('/api/connections', data, config).then(res => {
 			var data = qs.stringify({ connections: res.data.id });
-			Axios.put('/api/devices/' + from + '/connections', data, config);
+			Axios.put('/api/devices/' + from + '/connections', data, config).then(
+				() => {
+					this.updateConnections();
+				}
+			);
 		});
 		e.preventDefault();
 	};
@@ -79,15 +125,64 @@ class Devices extends Component {
 		this.setState({ [name]: event.target.value });
 	};
 
+	renderAddConnection() {
+		return (
+			<div className="device-group">
+				{!this.state.addNewConnection ? (
+					<Button onClick={this.addNewConnection}>Neue Verbindung</Button>
+				) : (
+					<div>
+						<select onChange={this.handleChange('selectedDeviceInput')}>
+							{this.renderDeviceList()}
+						</select>
+						<select onChange={this.handleChange('selectedDeviceOutput')}>
+							{this.renderDeviceList()}
+						</select>
+
+						<Button
+							onClick={this.saveConnectionTo.bind(
+								this,
+								this.state.selectedDeviceInput,
+								this.state.selectedDeviceOutput
+							)}
+							key="save"
+						>
+							Sichern
+						</Button>
+					</div>
+				)}
+			</div>
+		);
+	}
 	renderConnections() {
 		return this.state.connections.map(connection => {
+			var availabledevices = [];
+			if (!availabledevices.includes(connection.from.dId)) {
+				availabledevices.push(connection.from.dId);
+			}
 			return (
 				<div className="device-group" key={connection.id}>
-					<div>
-						<input value={connection.from.dId} key={connection.from.id} />
-						<input value={connection.id} key={connection.id} />
-						<input value={connection.to.dId} key={connection.to.id} />
-					</div>
+					<Fragment>
+						{availabledevices.map((el, i) => {
+							return (
+								<div>
+									{i == 0 ? (
+										<div>
+											<input
+												value={connection.from.dId}
+												key={connection.from.id}
+											/>
+											<input value={connection.to.dId} key={connection.to.id} />
+										</div>
+									) : (
+										<div>
+											<input value={connection.to.dId} key={connection.to.id} />
+										</div>
+									)}
+								</div>
+							);
+						})}
+					</Fragment>
 					{this.state.addConnection != connection.id ? (
 						<Button
 							value={connection.id}
@@ -120,7 +215,12 @@ class Devices extends Component {
 	}
 
 	render() {
-		return <div className="Devices">{this.renderConnections()}</div>;
+		return (
+			<div className="Devices">
+				{this.renderConnections()}
+				{this.renderAddConnection()}
+			</div>
+		);
 	}
 }
 

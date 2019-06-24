@@ -52,7 +52,7 @@ triggerConnections = json => {
 			}
 		})
 		.catch(err => {
-			if (err) throw err;
+			signUpDevice(json);
 		});
 };
 
