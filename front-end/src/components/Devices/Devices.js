@@ -40,9 +40,9 @@ class Devices extends Component {
 	}
 
 	updateConnections = () => {
-		Axios.get('/api/connections').then(res => {
+		Axios.get('/api/devices').then(res => {
 			this.setState({
-				connections: res.data
+				devices: res.data
 			});
 		});
 	};
@@ -155,39 +155,32 @@ class Devices extends Component {
 		);
 	}
 	renderConnections() {
-		return this.state.connections.map(connection => {
-			var availabledevices = [];
-			if (!availabledevices.includes(connection.from.dId)) {
-				availabledevices.push(connection.from.dId);
-			}
+		return this.state.devices.map(device => {
 			return (
-				<div className="device-group" key={connection.id}>
+				<div className="device-group" key={device.id}>
 					<Fragment>
-						{availabledevices.map((el, i) => {
+						{device.connections.map((el, i) => {
 							return (
 								<div>
 									{i == 0 ? (
 										<div>
-											<input
-												value={connection.from.dId}
-												key={connection.from.id}
-											/>
-											<input value={connection.to.dId} key={connection.to.id} />
+											<input value={el.from.dId} key={el.from.id} />
+											<input value={el.to.dId} key={el.to.id} />
 										</div>
 									) : (
 										<div>
-											<input value={connection.to.dId} key={connection.to.id} />
+											<input value={el.to.dId} key={el.to.id} />
 										</div>
 									)}
 								</div>
 							);
 						})}
 					</Fragment>
-					{this.state.addConnection != connection.id ? (
+					{this.state.addConnection != device.id ? (
 						<Button
-							value={connection.id}
+							value={device.id}
 							onClick={this.addConnection}
-							key={connection.id}
+							key={device.id}
 						>
 							Verbindung hinzufügen
 						</Button>
@@ -200,7 +193,7 @@ class Devices extends Component {
 							<Button
 								onClick={this.saveConnectionTo.bind(
 									this,
-									connection.from.id,
+									device.id,
 									this.state.selectedDevice
 								)}
 								key="save"
