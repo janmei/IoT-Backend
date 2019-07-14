@@ -121,6 +121,8 @@ class Devices extends Component {
 		e.preventDefault();
 	};
 
+	deleteConnection = id => {};
+
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
 	};

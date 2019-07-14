@@ -2,103 +2,173 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
- 
-const char* SSID = "CartoonNetwork";
-const char* PSK = "SPJ2017krda78";
-const char* MQTT_BROKER = "192.168.0.248";
 
- // constants won't change. They're used here to set pin numbers:
-const int buttonPin = D4;     // the number of the pushbutton pin
-const int ledPin =  D1;      // the number of the LED pin
+const char *SSID = "CartoonNetwork";
+const char *PSK = "SPJ2017krda78";
+const char *MQTT_BROKER = "192.168.0.248";
+const int idInt = 1;
+
+char idStr = char(idInt);
+
+// constants won't change. They're used here to set pin numbers:
+const int buttonPin = D5;       // the number of the pushbutton pin
+const int ledPin = BUILTIN_LED; // the number of the LED pin
 bool pressed = false;
 // variables will change:
-int buttonState = 0;         // variable for reading the pushbutton status
+int buttonState = 0; // variable for reading the pushbutton status
 WiFiClient espClient;
 PubSubClient client(espClient);
-long lastMsg = 0;
+
 char msg[50];
 int value = 0;
- 
-void setup() {
-  
-      // initialize the LED pin as an output:
+bool state = false;
+
+void setup()
+{
+
+  // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
   // initialize the pushbutton pin as an input:
-  pinMode(buttonPin, INPUT);
-  
-    Serial.begin(115200);
-    setup_wifi();
-    client.setServer(MQTT_BROKER, 1883);
+  pinMode(buttonPin, INPUT_PULLUP);
 
+  Serial.begin(115200);
+  setup_wifi();
+  client.setServer(MQTT_BROKER, 1883);
+  client.setCallback(callback);
 
+  digitalWrite(ledPin, HIGH);
 }
- 
-void setup_wifi() {
-    delay(10);
-    Serial.println();
-    Serial.print("Connecting to ");
-    Serial.println(SSID);
- 
-    WiFi.begin(SSID, PSK);
- 
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
- 
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
+
+void setup_wifi()
+{
+  delay(10);
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(SSID);
+
+  WiFi.begin(SSID, PSK);
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
 }
- 
-void reconnect() {
-    while (!client.connected()) {
-        Serial.print("Reconnecting...");
-        if (!client.connect("ESP8266Client")) {
-            Serial.print("failed, rc=");
-            Serial.print(client.state());
-            Serial.println(" retrying in 5 seconds");
-            delay(5000);
-        }
-    }
+
+String macToStr(const uint8_t *mac)
+{
+  String result;
+  for (int i = 0; i < 6; ++i)
+  {
+    result += String(mac[i], 16);
+    if (i < 5)
+      result += ':';
+  }
+  return result;
 }
-void loop() {
 
-const size_t capacity = 2*JSON_OBJECT_SIZE(2)+90;
-char buffer[526];
-DynamicJsonDocument doc(capacity);
+void reconnect()
+{
+  // Generate client name based on MAC address and last 8 bits of microsecond counter
+  String clientName;
+  clientName += "esp8266-";
+  uint8_t mac[6];
+  WiFi.macAddress(mac);
+  clientName += macToStr(mac);
+  clientName += "-";
+  clientName += String(micros() & 0xff, 16);
 
-doc["id"] = 1;
-
-JsonObject action = doc.createNestedObject("action");
-action["name"] = "ping";
-action["state"] = 1;
-
-serializeJson(doc, buffer);
-    
-    if (!client.connected()) {
-        reconnect();
+  // Loop until we're reconnected
+  while (!client.connected())
+  {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect((char *)clientName.c_str()))
+    {
+      Serial.println("connected");
+      // ... and resubscribe
+      char buf[100];
+      sprintf(buf, "/s/d/%d", idInt);
+      client.subscribe(buf);
     }
-    client.loop();
+    else
+    {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+void callback(char *topic, byte *payload, unsigned int length)
+{
+  StaticJsonDocument<256> doc;
+  deserializeJson(doc, payload, length);
+  // use the JsonDocument as usual...
+  if (doc["type"] == "action")
+  {
+    state = true;
+    digitalWrite(ledPin, LOW);
+  }
+  Serial.println(state);
+}
 
-      // read the state of the pushbutton value:
+void loop()
+{
+
+  const size_t capacity = 2 * JSON_OBJECT_SIZE(2) + 90;
+  char buffer[526];
+  DynamicJsonDocument doc(capacity);
+
+  doc["id"] = idInt;
+
+  JsonObject action = doc.createNestedObject("action");
+  action["type"] = "action";
+  action["state"] = 1;
+
+  serializeJson(doc, buffer);
+
+  if (!client.connected())
+  {
+    reconnect();
+  }
+  client.loop();
+
+  // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
 
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-  if (buttonState == LOW) {
-    if(!pressed){
+  if (buttonState == LOW)
+  {
+    if (!pressed && !state)
+    {
       pressed = true;
+      char buf[100];
+      sprintf(buf, "/d/s/%d", idInt);
       Serial.print("Publish message: ");
       Serial.println(msg);
-      client.publish("/d/s/1", buffer);
+      client.publish(buf, buffer);
       // turn LED on:
-      digitalWrite(ledPin, LOW);
+      // digitalWrite(ledPin, LOW);
     }
-  } else {
+    else if (!pressed && state == 1)
+    {
+      digitalWrite(ledPin, HIGH);
+      pressed = true;
+      state = 0;
+      Serial.println("Switched off LED");
+    }
+  }
+  else
+  {
     // turn LED off:
-    digitalWrite(ledPin, HIGH);
+    // digitalWrite(ledPin, LOW);
     pressed = false;
   }
-
 }

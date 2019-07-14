@@ -59,14 +59,13 @@ triggerConnections = json => {
 signUpDevice = json => {
 	var data = qs.stringify(
 		{
-			dId: json.id,
-			action: json.action
+			dId: json.id
 		},
 		{ allowDots: true }
 	);
 
 	axios
-		.put(DB_URL + '/devices/' + json.id, data, config)
+		.post(DB_URL + '/api/devices/', data, config)
 		// .then(res => console.log(res))
 		.catch(err => {
 			if (err) throw err;

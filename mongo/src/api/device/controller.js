@@ -1,8 +1,8 @@
 import { success, notFound } from '../../services/response/'
 import { Device } from '.'
 
-export const create = (req, res, next) =>
-  Device.create(req.params.body)
+export const create = ({ bodymen: { body } }, res, next) =>
+  Device.create(body)
     .then(device => device.view(true))
     .then(success(res, 201))
     .catch(next)
