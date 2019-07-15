@@ -1,0 +1,29 @@
+.Device {
+	height: auto;
+	max-width: 300px;
+	width: 100%;
+	border: 3px solid #dadada;
+	border-radius: 17px;
+	padding: 28px;
+	margin: 32px;
+}
+
+.number {
+	height: 5rem;
+	width: 5rem;
+	border: 2px solid #dadada;
+	border-radius: 9px;
+}
+
+.connections {
+	margin: 0;
+	margin-top: 16px;
+	padding: 0;
+	list-style-type: none;
+}
+
+.connections li {
+	height: 30px;
+	background-color: #dadada;
+	border-radius: 5px;
+}
