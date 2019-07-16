@@ -1,5 +1,5 @@
 .Device {
-	height: auto;
+	height: min-content;
 	max-width: 300px;
 	width: 100%;
 	border: 3px solid #dadada;
@@ -13,6 +13,11 @@
 	width: 5rem;
 	border: 2px solid #dadada;
 	border-radius: 9px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 40px;
+	font-weight: bold;
 }
 
 .connections {
