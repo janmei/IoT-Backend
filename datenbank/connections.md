@@ -1,16 +1,12 @@
-# Datenbank
+# Connections
 
-##  Struktur
-
-### Devices
-
-{% api-method method="get" host="" path="/api/devices" %}
+{% api-method method="get" host="" path="/api/connections" %}
 {% api-method-summary %}
-Get all Devices
+Get All Connections
 {% endapi-method-summary %}
 
 {% api-method-description %}
-Listet alle Geräte und deren Verbindungen auf, die in der Datenbank gefunden werden können
+Listet alle Verbindungen auf, die zwischen Geräten gerade bestehen.
 {% endapi-method-description %}
 
 {% api-method-spec %}
@@ -30,78 +26,20 @@ Listet alle Geräte und deren Verbindungen auf, die in der Datenbank gefunden we
 {% endapi-method-spec %}
 {% endapi-method %}
 
-{% api-method method="get" host="" path="/api/devices/:id" %}
+{% api-method method="get" host="" path="/api/connections/:id" %}
 {% api-method-summary %}
-Get one Device
+Get One Connection
 {% endapi-method-summary %}
 
 {% api-method-description %}
-Listet alle Details über ein bestimmtes Gerät in der Datenbank auf
+Listet alle Details über eine Verbindung auf.
 {% endapi-method-description %}
 
 {% api-method-spec %}
 {% api-method-request %}
 {% api-method-path-parameters %}
-{% api-method-parameter name="id" type="string" required=true %}
-Object ID des Devices
-{% endapi-method-parameter %}
-{% endapi-method-path-parameters %}
-{% endapi-method-request %}
-
-{% api-method-response %}
-{% api-method-response-example httpCode=200 %}
-{% api-method-response-example-description %}
-
-{% endapi-method-response-example-description %}
-
-```javascript
-
-```
-{% endapi-method-response-example %}
-{% endapi-method-response %}
-{% endapi-method-spec %}
-{% endapi-method %}
-
-{% api-method method="post" host="" path="/api/devices" %}
-{% api-method-summary %}
-Create Device
-{% endapi-method-summary %}
-
-{% api-method-description %}
-Erstellt ein Gerät.
-{% endapi-method-description %}
-
-{% api-method-spec %}
-{% api-method-request %}
-
-{% api-method-response %}
-{% api-method-response-example httpCode=200 %}
-{% api-method-response-example-description %}
-
-{% endapi-method-response-example-description %}
-
-```
-
-```
-{% endapi-method-response-example %}
-{% endapi-method-response %}
-{% endapi-method-spec %}
-{% endapi-method %}
-
-{% api-method method="put" host="" path="/api/devices/:id" %}
-{% api-method-summary %}
-Update Device
-{% endapi-method-summary %}
-
-{% api-method-description %}
-
-{% endapi-method-description %}
-
-{% api-method-spec %}
-{% api-method-request %}
-{% api-method-path-parameters %}
-{% api-method-parameter name="id" type="string" required=true %}
-Object ID des Devices
+{% api-method-parameter name="id" type="string" required=false %}
+Object ID der Verbindung
 {% endapi-method-parameter %}
 {% endapi-method-path-parameters %}
 {% endapi-method-request %}
@@ -120,28 +58,32 @@ Object ID des Devices
 {% endapi-method-spec %}
 {% endapi-method %}
 
-{% api-method method="delete" host="" path="/api/devices/:id" %}
+{% api-method method="post" host="" path="/api/connections" %}
 {% api-method-summary %}
-Delete Device
+Create Connection
 {% endapi-method-summary %}
 
 {% api-method-description %}
-
+Erstellt eine Verbindung zwischen zwei Geräten
 {% endapi-method-description %}
 
 {% api-method-spec %}
 {% api-method-request %}
-{% api-method-path-parameters %}
-{% api-method-parameter name="id" type="string" required=true %}
-Object ID des Devices
+{% api-method-body-parameters %}
+{% api-method-parameter name="fromID" type="string" required=true %}
+Object ID des Geräts welches triggered.
 {% endapi-method-parameter %}
-{% endapi-method-path-parameters %}
+
+{% api-method-parameter name="toID" type="string" required=true %}
+Object ID des Geräts welches getriggered werden soll.
+{% endapi-method-parameter %}
+{% endapi-method-body-parameters %}
 {% endapi-method-request %}
 
 {% api-method-response %}
 {% api-method-response-example httpCode=200 %}
 {% api-method-response-example-description %}
-   
+
 {% endapi-method-response-example-description %}
 
 ```
@@ -152,5 +94,67 @@ Object ID des Devices
 {% endapi-method-spec %}
 {% endapi-method %}
 
+{% api-method method="put" host="" path="/api/connections/:id" %}
+{% api-method-summary %}
+Update
+{% endapi-method-summary %}
 
+{% api-method-description %}
+Aktualisiert die Verbindung 
+{% endapi-method-description %}
+
+{% api-method-spec %}
+{% api-method-request %}
+{% api-method-path-parameters %}
+{% api-method-parameter name="id" type="string" required=true %}
+ObjectID der Verbindung
+{% endapi-method-parameter %}
+{% endapi-method-path-parameters %}
+{% endapi-method-request %}
+
+{% api-method-response %}
+{% api-method-response-example httpCode=200 %}
+{% api-method-response-example-description %}
+
+{% endapi-method-response-example-description %}
+
+```
+
+```
+{% endapi-method-response-example %}
+{% endapi-method-response %}
+{% endapi-method-spec %}
+{% endapi-method %}
+
+{% api-method method="delete" host="" path="/api/connections/:id" %}
+{% api-method-summary %}
+Update
+{% endapi-method-summary %}
+
+{% api-method-description %}
+Löscht die Verbindung
+{% endapi-method-description %}
+
+{% api-method-spec %}
+{% api-method-request %}
+{% api-method-path-parameters %}
+{% api-method-parameter name="id" type="string" required=true %}
+ObjectID der Verbindung
+{% endapi-method-parameter %}
+{% endapi-method-path-parameters %}
+{% endapi-method-request %}
+
+{% api-method-response %}
+{% api-method-response-example httpCode=200 %}
+{% api-method-response-example-description %}
+
+{% endapi-method-response-example-description %}
+
+```
+
+```
+{% endapi-method-response-example %}
+{% endapi-method-response %}
+{% endapi-method-spec %}
+{% endapi-method %}
 
