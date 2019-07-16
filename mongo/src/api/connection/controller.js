@@ -1,5 +1,6 @@
 import { success, notFound } from '../../services/response/'
 import { Connection } from '.'
+import Devices from '../device/model'
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Connection.create(body)
@@ -30,9 +31,18 @@ export const update = (req, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const destroy = ({ params }, res, next) =>
+export const destroy = ({ params }, res, next) => {
+  Devices.updateOne(
+    { connections: { $in: [params.id] } },
+    {
+      $pull: { connections: params.id }
+    }
+  )
+    .then(notFound(res))
+    .catch(next)
   Connection.findById(params.id)
     .then(notFound(res))
     .then(connection => (connection ? connection.remove() : null))
     .then(success(res, 204))
     .catch(next)
+}

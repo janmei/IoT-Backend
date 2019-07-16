@@ -42,8 +42,6 @@ class Device extends Component {
 	}
 
 	addConnection = e => {
-		console.log(e.target.value);
-
 		this.setState({
 			addConnection: e.target.value,
 			selectedDevice: this.state.device.id
@@ -90,6 +88,12 @@ class Device extends Component {
 		e.preventDefault();
 	};
 
+	sendUpdate = () => {
+		if (typeof this.props.onChange === 'function') {
+			this.props.onChange(true);
+		}
+	};
+
 	renderConnections() {
 		return (
 			<div className="device-group" key={this.state.device.id}>
@@ -129,7 +133,13 @@ class Device extends Component {
 				<div className="number">{this.props.data.dId}</div>
 				<ul className="connections">
 					{this.state.connections.map(connection => {
-						return <Connection data={connection} key={connection.id} />;
+						return (
+							<Connection
+								data={connection}
+								key={connection.id}
+								onChange={this.sendUpdate}
+							/>
+						);
 					})}
 				</ul>
 				{this.renderConnections()}

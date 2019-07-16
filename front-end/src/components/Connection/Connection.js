@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Connection.css';
+import Axios from 'axios';
 
 const config = {
 	headers: {
@@ -16,10 +17,19 @@ class Connection extends Component {
 		};
 	}
 
+	deleteConnection = () => {
+		Axios.delete('/api/connections/' + this.props.data.id).then(res => {
+			if (typeof this.props.onChange === 'function') {
+				this.props.onChange(true);
+			}
+		});
+	};
+
 	render() {
 		return (
-			<li>
+			<li className="connection-item">
 				<p>{this.props.data.to.dId}</p>
+				<div onClick={this.deleteConnection}>X</div>
 			</li>
 		);
 	}

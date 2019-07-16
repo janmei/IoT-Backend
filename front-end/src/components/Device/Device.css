@@ -21,9 +21,3 @@
 	padding: 0;
 	list-style-type: none;
 }
-
-.connections li {
-	height: 30px;
-	background-color: #dadada;
-	border-radius: 5px;
-}

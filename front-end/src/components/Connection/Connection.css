@@ -1,29 +1,16 @@
-.Device {
-	height: auto;
-	max-width: 300px;
-	width: 100%;
-	border: 3px solid #dadada;
-	border-radius: 17px;
-	padding: 28px;
-	margin: 32px;
-}
-
-.number {
-	height: 5rem;
-	width: 5rem;
-	border: 2px solid #dadada;
-	border-radius: 9px;
-}
-
-.connections {
-	margin: 0;
-	margin-top: 16px;
-	padding: 0;
-	list-style-type: none;
-}
-
-.connections li {
-	height: 30px;
+.connection-item {
+	height: 40px;
 	background-color: #dadada;
 	border-radius: 5px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 8px;
+	font-weight: bold;
+	font-size: 18px;
+	margin-bottom: 12px;
+}
+
+.connection-item p {
+	margin: 0;
 }
