@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './Device.css';
 import Axios from 'axios';
 import qs from 'qs';
@@ -67,10 +67,8 @@ class Device extends Component {
 			},
 			{ allowDots: true }
 		);
-		var arrIndex;
 		this.state.devices.some((el, i) => {
 			if (el.id === from) {
-				arrIndex = i;
 				return true;
 			}
 		});
@@ -97,7 +95,7 @@ class Device extends Component {
 	renderConnections() {
 		return (
 			<div className="device-group" key={this.state.device.id}>
-				{this.state.addConnection != this.state.device.id ? (
+				{this.state.addConnection !== this.state.device.id ? (
 					<Button
 						value={this.state.device.id}
 						onClick={this.addConnection}

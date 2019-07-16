@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './Devices.css';
 import Axios from 'axios';
-import qs from 'qs';
 import Button from 'antd/lib/button';
 import Device from '../Device/Device';
 
@@ -51,11 +50,7 @@ class Devices extends Component {
 	setupDeviceConnections = data => {
 		data.forEach(el => {
 			if (this.state.deviceConnections.length > 0) {
-				if (this.state.deviceConnections.find(x => x.id === el.id) != true) {
-					var obj = {
-						dId: el.from.dId,
-						connections: ''
-					};
+				if (this.state.deviceConnections.find(x => x.id === el.id) !== true) {
 					this.state.deviceConnections.push(el);
 				}
 			}
