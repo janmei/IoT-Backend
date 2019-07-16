@@ -50,8 +50,20 @@ Object ID der Verbindung
 
 {% endapi-method-response-example-description %}
 
-```
-
+```javascript
+{
+    "id": "5d2e39c99daeda1a68de5411",
+    "from": {
+        "dId": 0,
+        "id": "5d2b8e0913047f50b4efc181"
+    },
+    "to": {
+        "dId": 1,
+        "id": "5d2b8d4513047f50b4efc180"
+    },
+    "createdAt": "2019-07-16T20:55:37.378Z",
+    "updatedAt": "2019-07-16T20:55:37.378Z"
+}
 ```
 {% endapi-method-response-example %}
 {% endapi-method-response %}

@@ -57,7 +57,40 @@ Object ID des Devices
 {% endapi-method-response-example-description %}
 
 ```javascript
-
+{
+    "id": "5d2b8e0913047f50b4efc181",
+    "dId": 0,
+    "connections": [
+        {
+            "from": {
+                "connections": [
+                    "5d2e39c99daeda1a68de5411"
+                ],
+                "dId": 0,
+                "createdAt": "2019-07-14T20:18:17.697Z",
+                "updatedAt": "2019-07-16T20:55:37.476Z",
+                "__v": 0,
+                "id": "5d2b8e0913047f50b4efc181"
+            },
+            "to": {
+                "connections": [
+                    "5d2d0011f887990aea92c545"
+                ],
+                "dId": 1,
+                "createdAt": "2019-07-14T20:15:01.149Z",
+                "updatedAt": "2019-07-15T22:37:05.080Z",
+                "__v": 0,
+                "id": "5d2b8d4513047f50b4efc180"
+            },
+            "createdAt": "2019-07-16T20:55:37.378Z",
+            "updatedAt": "2019-07-16T20:55:37.378Z",
+            "__v": 0,
+            "id": "5d2e39c99daeda1a68de5411"
+        }
+    ],    
+    "createdAt": "2019-07-14T20:18:17.697Z",
+    "updatedAt": "2019-07-16T20:55:37.476Z"
+}
 ```
 {% endapi-method-response-example %}
 {% endapi-method-response %}
@@ -114,8 +147,41 @@ Object ID des Devices
 
 {% endapi-method-response-example-description %}
 
-```
-
+```javascript
+{
+    "id": "5d2b8e0913047f50b4efc181",
+    "dId": 0,
+    "connections": [
+        {
+            "from": {
+                "connections": [
+                    "5d2e39c99daeda1a68de5411"
+                ],
+                "dId": 0,
+                "createdAt": "2019-07-14T20:18:17.697Z",
+                "updatedAt": "2019-07-16T20:55:37.476Z",
+                "__v": 0,
+                "id": "5d2b8e0913047f50b4efc181"
+            },
+            "to": {
+                "connections": [
+                    "5d2d0011f887990aea92c545"
+                ],
+                "dId": 1,
+                "createdAt": "2019-07-14T20:15:01.149Z",
+                "updatedAt": "2019-07-15T22:37:05.080Z",
+                "__v": 0,
+                "id": "5d2b8d4513047f50b4efc180"
+            },
+            "createdAt": "2019-07-16T20:55:37.378Z",
+            "updatedAt": "2019-07-16T20:55:37.378Z",
+            "__v": 0,
+            "id": "5d2e39c99daeda1a68de5411"
+        }
+    ],    
+    "createdAt": "2019-07-14T20:18:17.697Z",
+    "updatedAt": "2019-07-16T20:55:37.476Z"
+}
 ```
 {% endapi-method-response-example %}
 {% endapi-method-response %}
