@@ -5,4 +5,5 @@
   * [Devices](datenbank/devices.md)
   * [Connections](datenbank/connections.md)
 * [Kommunikation](kommunikation.md)
+* [Bildliche Dokumentation](bildliche-dokumentation.md)
 

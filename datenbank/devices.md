@@ -8,7 +8,7 @@ description: >-
 
 {% api-method method="get" host="" path="/api/devices" %}
 {% api-method-summary %}
-Get all Devices
+Get All Devices
 {% endapi-method-summary %}
 
 {% api-method-description %}
@@ -34,7 +34,7 @@ Listet alle Geräte und deren Verbindungen auf, die in der Datenbank gefunden we
 
 {% api-method method="get" host="" path="/api/devices/:id" %}
 {% api-method-summary %}
-Get one Device
+Get One Device
 {% endapi-method-summary %}
 
 {% api-method-description %}
