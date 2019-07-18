@@ -2,6 +2,8 @@
 
 ## Einleitung
 
+Die Dokumentation befindet sich auf [https://docs.janmeininghaus.com/](https://docs.janmeininghaus.com/)
+
 Das Projekt wurde im Rahmen der Semester-Abgabe für CC erstellt und beinhaltet eine Architektur, die es einfach macht, die Kommunikation von IoT Geräten zu steuern und zu bearbeiten. Das System basiert auf einer MongoDB Datenbank, einem Node Server als Backend und API Steuerung, sowie einem React-Frontend zur Anpassungen der Kommunikation zwischen den Geräten.
 
 ### Setup
