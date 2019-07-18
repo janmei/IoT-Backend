@@ -43,3 +43,11 @@ Das Skript befindet sich im Rootverzeichnis des Projekts und wird mit `node serv
 
 Falls der Port des MQTT Brokers von dem oben genannten Port abweicht, muss dieser in der server.js Datei angepasst werden. 
 
+#### ESP Build oder Simulation
+
+Falls zwei ESPs mit Buttons zur Verfügung stehen kann man eine einfache Button Schaltung bauen und das Skript `Button.ino` aus `Button/Button/` auf die ESPs laden. 
+
+Anderen falls kann man auch die Skripte receiver.js und button.js mit `node button.js` und `node receiver.js` sin separaten Terminals starten.
+
+Diese senden alle 5 Sekunden Signale und simulieren so eine Kommunikation untereinander. Die LED muss man sich dann denken ;\) 
+
