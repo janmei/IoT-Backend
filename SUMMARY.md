@@ -5,7 +5,7 @@
   * [Devices](datenbank/devices.md)
   * [Connections](datenbank/connections.md)
 * [MQTT](kommunikation.md)
-* [Bildliche Dokumentation](bildliche-dokumentation.md)
+* [Demonstration](bildliche-dokumentation.md)
 * [Systemablauf](systemablauf.md)
 * [Front-End](front-end.md)
 
