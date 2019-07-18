@@ -14,3 +14,7 @@
 .connection-item p {
 	margin: 0;
 }
+
+.deleteItem {
+	cursor: pointer;
+}

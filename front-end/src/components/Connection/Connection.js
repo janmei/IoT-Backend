@@ -29,7 +29,9 @@ class Connection extends Component {
 		return (
 			<li className="connection-item">
 				<p>{this.props.data.to.dId}</p>
-				<div onClick={this.deleteConnection}>X</div>
+				<div onClick={this.deleteConnection} className="deleteItem">
+					X
+				</div>
 			</li>
 		);
 	}

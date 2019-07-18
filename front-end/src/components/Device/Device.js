@@ -3,7 +3,9 @@ import './Device.css';
 import Axios from 'axios';
 import qs from 'qs';
 import Button from 'antd/lib/button';
+import { Select } from 'antd';
 import Connection from '../Connection/Connection';
+const { Option } = Select;
 
 const config = {
 	headers: {
@@ -24,7 +26,7 @@ class Device extends Component {
 		};
 	}
 	handleChange = name => event => {
-		this.setState({ [name]: event.target.value });
+		this.setState({ [name]: event });
 	};
 
 	componentDidMount() {
@@ -52,7 +54,7 @@ class Device extends Component {
 	renderDeviceList() {
 		if (this.state.devices != null) {
 			return this.state.devices.map((item, i) => {
-				return <option value={item.id}>{item.dId}</option>;
+				return <Option value={item.id}>{item.dId}</Option>;
 			});
 		} else {
 			return;
@@ -105,9 +107,12 @@ class Device extends Component {
 					</Button>
 				) : (
 					<div>
-						<select onChange={this.handleChange('selectedDevice')}>
+						<Select
+							onChange={this.handleChange('selectedDevice')}
+							defaultValue={0}
+						>
 							{this.renderDeviceList()}
-						</select>
+						</Select>
 
 						<Button
 							onClick={this.saveConnectionTo.bind(
