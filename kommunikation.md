@@ -1,4 +1,4 @@
-# Kommunikation
+# MQTT
 
 Die Geräte kommunizieren über einen MQTT Broker welcher entweder lokal oder über eine externen Anbieter gehostet werden kann. Für das Projekt wurde sich für einen lokalen MQTT Broker entschieden, da dieser leichter ist erstellen und mehr Debugging Daten zur Verfügung stellt, als ein externer Anbieter.
 

@@ -4,6 +4,8 @@
 * [REST API](datenbank/README.md)
   * [Devices](datenbank/devices.md)
   * [Connections](datenbank/connections.md)
-* [Kommunikation](kommunikation.md)
+* [MQTT](kommunikation.md)
 * [Bildliche Dokumentation](bildliche-dokumentation.md)
+* [Systemablauf](systemablauf.md)
+* [Front-End](front-end.md)
 
